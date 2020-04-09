@@ -1,0 +1,9 @@
+name: HardcoreFactions
+author: SmakYop
+version: 1.0-SNAPSHOT
+main: com.smakyop.factions.HardcoreFactions
+commands:
+  faction:
+    aliases: f
+  lives:
+  fsecret:
