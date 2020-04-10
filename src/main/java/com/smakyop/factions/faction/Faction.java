@@ -24,7 +24,7 @@ public class Faction {
     private int points;
     private long creationDate;
     private UUID ownerId;
-    private List<Player> members;
+    private List<String> members;
     private List<Faction> allies;
     private DTRManager dtrManager;
     private Location homeLocation;
@@ -41,6 +41,10 @@ public class Faction {
 
     public static Faction getFaction(String name){
         return factions.get(name);
+    }
+
+    public static HashMap<String, Faction> getFactions(){
+        return factions;
     }
 
     public String getName() {
@@ -127,13 +131,19 @@ public class Faction {
         this.allies.add(faction);
     }
 
-    public List<Player> getMembers() {
+    public List<String> getMembers() {
         return members;
     }
 
-    public void addPlayer(Player player){
-        this.members.add(player);
+    public void setMembers(List<String> members){
+        this.members = members;
     }
+
+    public void addPlayer(String playerName){
+        this.members.add(playerName);
+    }
+
+    public void removePlayer(String playerName){ this.members.remove(playerName); }
 
     public boolean isAllyWith(Faction faction){
         return this.allies.contains(faction);
@@ -154,7 +164,7 @@ public class Faction {
     public void create(FactionPlayer creator){
         if (HardcoreFactions.getInstance().getGeneralConfig().hasDatabase())
             HardcoreFactions.getInstance().getFactionsDatabase().createFaction(this.name);
-        else HardcoreFactions.getInstance().getFactionsConfig().createFaction(this.name);
+        else HardcoreFactions.getInstance().getFactionsConfig().saveFaction(this.name);
 
         for(Player player : Bukkit.getOnlinePlayers()){
             FactionPlayer factionPlayer = FactionPlayer.getPlayer(player);
@@ -164,9 +174,17 @@ public class Faction {
 
     public int getOnlinePlayers(){
         int online = 0;
-        for(Player player : members){
-            if(player.isOnline()) online++;
+        for(String player : members){
+            if(Bukkit.getPlayer(player) != null)
+                online++;
         }
         return online;
+    }
+
+    public void sendMessage(String message){
+        for(String playerName : members){
+            if(Bukkit.getPlayer(playerName) != null)
+                Bukkit.getPlayer(playerName).sendMessage(message);
+        }
     }
 }

@@ -31,9 +31,18 @@ public class MessageConfig {
             configuration.set("command.player-has-already-faction", "&cYou are already on a faction.");
             configuration.set("command.player-has-not-faction", "&cYou are not on a faction.");
             configuration.set("command.invalid-player-and-faction", "&cInvalid player or faction.");
+            configuration.set("command.target-has-faction", "&cThe player is already on a faction.");
 
             configuration.set("faction.create", "%relation-color%%player-rank%%player-name% &bhas created a new faction: %relation-color%%faction-name%");
             configuration.set("faction.default-description", "Default description");
+            configuration.set("faction.player-no-permission", "&cYou haven't the permission.");
+            configuration.set("faction.none-invitations", "&cYou haven't any invitations.");
+            configuration.set("faction.faction-not-invit", "&cThis faction has not invited you.");
+            configuration.set("faction.successfully-join-faction", "&bYou successfully joined the faction: &a%faction-name%");
+            configuration.set("faction.player-join-faction", "&a%player-name% &bhas joined your faction.");
+            configuration.set("faction.player-receive-faction-invitation", "&bYou received an invitation to join the faction: &c%faction-name%");
+            configuration.set("faction.player-receive-faction-invitation-clickable", "&7Click here to join the faction!");
+            configuration.set("faction.player-sent-faction-invitation", "&bYou successfully invited: &c%player-name%");
             configuration.save(file);
         }catch (IOException e){
             e.printStackTrace();
@@ -64,6 +73,10 @@ public class MessageConfig {
         return this.configuration.getString("command.invalid-player-and-faction").replace("&", "§");
     }
 
+    public String getCommandTargetHasFaction(){
+        return this.configuration.getString("command.target-has-faction").replace("&", "§");
+    }
+
     public String getFactionCreate(FactionPlayer playerCreator, FactionPlayer receiver){
         return this.configuration.getString("faction.create").replace("&", "§")
                 .replace("%player-rank%", playerCreator.getFactionRanks().getName())
@@ -74,5 +87,45 @@ public class MessageConfig {
 
     public String getFactionDefaultDescription(){
         return this.configuration.getString("faction.default-description");
+    }
+
+    public String getFactionPlayerNoPermission(){
+        return this.configuration.getString("faction.player-no-permission").replace("&", "§");
+
+    }
+
+    public String getFactionNoneInvitation(){
+        return this.configuration.getString("faction.none-invitations").replace("&", "§");
+
+    }
+
+    public String getFactionNotInvit(){
+        return this.configuration.getString("faction.faction-not-invit").replace("&", "§");
+
+    }
+
+    public String getFactionSuccessfullyJoinedFaction(String factionName){
+        return this.configuration.getString("faction.successfully-join-faction").replace("&", "§").replace("%faction-name%", factionName);
+
+    }
+
+    public String getFactionPlayerJoined(String playerName){
+        return this.configuration.getString("faction.player-join-faction").replace("&", "§").replace("%player-name%", playerName);
+
+    }
+
+    public String getFactionPlayerReceiveInvitation(String factionName){
+        return this.configuration.getString("faction.player-receive-faction-invitation").replace("&", "§").replace("%faction-name%", factionName);
+
+    }
+
+    public String getFactionPlayerSentInvitation(String playerName){
+        return this.configuration.getString("faction.player-sent-faction-invitation").replace("&", "§").replace("%player-name%", playerName);
+
+    }
+
+    public String getFactionPlayerReceiveInvitationClickable(){
+        return this.configuration.getString("faction.player-receive-faction-invitation-clickable").replace("&", "§");
+
     }
 }

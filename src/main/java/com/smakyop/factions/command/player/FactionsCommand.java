@@ -44,6 +44,27 @@ public class FactionsCommand implements CommandExecutor {
 
                 HardcoreFactions.getInstance().getFactionsManager().sendFactionInformations(factionPlayer, factionPlayer.getFaction());
             }
+
+            if(args[0].equalsIgnoreCase("leave")){
+                if(factionPlayer.getFaction() == null){
+                    sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getCommandPlayerHasNotFaction());
+                    return true;
+                }
+
+                if(factionPlayer.getFactionRanks().getLevel() == 4){
+                    sender.sendMessage("");
+                    return true;
+                }
+
+                factionPlayer.getFaction().sendMessage("§c" + sender.getName() + " §bhas left your faction.");
+                factionPlayer.getFaction().removePlayer(sender.getName());
+                factionPlayer.setFaction(null);
+                factionPlayer.setFactionRanks(FactionRanks.NO_FACTION);
+            }
+
+            if(args[0].equalsIgnoreCase("list")){
+                
+            }
         }
 
         if(args.length == 2){
@@ -77,7 +98,8 @@ public class FactionsCommand implements CommandExecutor {
                 faction.setMaxDtr(HardcoreFactions.getInstance().getGeneralConfig().getMaxDtrUniqueMember());
                 faction.setDtr(faction.getMaxDtr());
                 faction.setDtrFreezed(false);
-                faction.addPlayer(sender);
+                faction.setHomeLocation(null);
+                faction.addPlayer(sender.getName());
                 factionPlayer.setFaction(faction);
                 factionPlayer.setFactionRanks(FactionRanks.LEADER);
                 faction.create(factionPlayer);
@@ -100,6 +122,31 @@ public class FactionsCommand implements CommandExecutor {
                 }
             }
 
+            if(args[0].equalsIgnoreCase("join")){
+                if(factionPlayer.getFaction() != null){
+                    sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getCommandPlayerHasAlreadyFaction());
+                    return true;
+                }
+
+                if(factionPlayer.getInvitations().size() == 0){
+                    sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionNoneInvitation());
+                    return true;
+                }
+
+                Faction faction = Faction.getFaction(secondArg);
+                if(faction == null || !factionPlayer.getInvitations().contains(faction)){
+                    sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionNotInvit());
+                    return true;
+                }
+
+                factionPlayer.getInvitations().clear();
+                factionPlayer.setFaction(faction);
+                sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionSuccessfullyJoinedFaction(faction.getName()));
+                faction.addPlayer(sender.getName());
+                faction.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionPlayerJoined(sender.getName()));
+                return true;
+            }
+
             Player target = Bukkit.getPlayer(secondArg);
             if(target == null){
                 sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getCommandPlayerTargetNull());
@@ -108,7 +155,30 @@ public class FactionsCommand implements CommandExecutor {
 
             FactionPlayer factionPlayerTarget = FactionPlayer.getPlayer(target);
 
+            if(args[0].equalsIgnoreCase("invite")){
+                if(factionPlayer.getFaction() == null){
+                    sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getCommandPlayerHasNotFaction());
+                    return true;
+                }
 
+                if(factionPlayer.getFactionRanks().getLevel() < 2){
+                    sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionPlayerNoPermission());
+                    return true;
+                }
+
+                if(factionPlayerTarget.getFaction() != null){
+                    sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getCommandTargetHasFaction());
+                    return true;
+                }
+
+                factionPlayerTarget.addInvitations(factionPlayer.getFaction());
+                target.sendMessage("");
+                target.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionPlayerReceiveInvitation(factionPlayer.getFaction().getName()));
+                target.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionPlayerReceiveInvitationClickable());
+                target.sendMessage("");
+                sender.sendMessage(HardcoreFactions.getInstance().getMessageConfig().getFactionPlayerSentInvitation(target.getName()));
+                return true;
+            }
         }
         return false;
     }

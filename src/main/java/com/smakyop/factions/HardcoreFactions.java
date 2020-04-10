@@ -64,6 +64,7 @@ public class HardcoreFactions extends JavaPlugin{
 
     @Override
     public void onDisable() {
+        this.factionsManager.saveFactions();
         instance = null;
     }
 

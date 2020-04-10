@@ -2,6 +2,8 @@ package com.smakyop.factions.config;
 
 import com.smakyop.factions.HardcoreFactions;
 import com.smakyop.factions.faction.Faction;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -28,7 +30,7 @@ public class FactionsConfig {
         return configuration;
     }
 
-    public void createFaction(String name){
+    public void saveFaction(String name){
         Faction faction = Faction.getFaction(name);
         try{
             configuration.set("factions." + name + ".owner", faction.getOwnerUUID().toString());
@@ -41,6 +43,16 @@ public class FactionsConfig {
             configuration.set("factions." + name + ".money", faction.getMoney());
             configuration.set("factions." + name + ".description", faction.getDescription());
             configuration.set("factions." + name + ".members", faction.getMembers());
+
+            if(faction.getHomeLocation() == null){
+                configuration.save(this.file);
+                return;
+            }
+
+            configuration.set("factions." + name + ".home-location.world", faction.getHomeLocation().getWorld().getName());
+            configuration.set("factions." + name + ".home-location.x", faction.getHomeLocation().getX());
+            configuration.set("factions." + name + ".home-location.y", faction.getHomeLocation().getY());
+            configuration.set("factions." + name + ".home-location.z", faction.getHomeLocation().getZ());
             configuration.save(this.file);
         }catch (IOException e){
             e.printStackTrace();
@@ -85,6 +97,10 @@ public class FactionsConfig {
 
     public List<String> getMembers(String factionName){
         return configuration.getStringList("factions." + factionName + ".members");
+    }
+
+    public Location getHomeLocation(String factionName){
+        return new Location(Bukkit.getWorld(configuration.getString("factions." + factionName + ".home-location.world")), configuration.getDouble("factions." + factionName + ".home-location.x"), configuration.getDouble("factions." + factionName + ".home-location.y"), configuration.getDouble("factions." + factionName + ".home-location.z"));
     }
 
     public void remove(String factionName){

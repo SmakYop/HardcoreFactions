@@ -5,8 +5,8 @@ public enum FactionRanks {
     NO_FACTION(0, ""),
     MEMBRE(1, ""),
     OFFICIER(2, "*"),
-    COLEADER(3, "*"),
-    LEADER(4, "**");
+    COLEADER(3, "**"),
+    LEADER(4, "***");
 
     private int level;
     private String name;

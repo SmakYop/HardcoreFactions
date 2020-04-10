@@ -22,7 +22,7 @@ public class PlayerChat implements Listener{
                 players.sendMessage(HardcoreFactions.getInstance().getRelationManager().getColorRelation(factionPlayerSender.getFaction(), factionPlayers.getFaction()) +
                         factionPlayerSender.getFactionRanks().getName() + factionPlayerSender.getFaction().getName() + " §7" + sender.getDisplayName() + ": §7" + event.getMessage());
             else players.sendMessage(HardcoreFactions.getInstance().getRelationManager().getColorRelation(factionPlayerSender.getFaction(), factionPlayers.getFaction()) +
-                    sender.getDisplayName() + ": §7" + event.getMessage());
+                    "§7" + sender.getDisplayName() + ": §7" + event.getMessage());
         }
     }
 }

@@ -4,6 +4,7 @@ import com.smakyop.factions.faction.Faction;
 import com.smakyop.factions.faction.FactionRanks;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ public class FactionPlayer {
     private int points;
     private FactionRanks factionRanks;
     private Faction faction;
+    private ArrayList<Faction> invitations;
 
     private static HashMap<Player, FactionPlayer> players = new HashMap<>();
 
@@ -26,6 +28,7 @@ public class FactionPlayer {
         this.player = player;
         this.playerId = player.getUniqueId();
         this.name = player.getName();
+        this.invitations  = new ArrayList<>();
         players.put(player, this);
     }
 
@@ -99,5 +102,13 @@ public class FactionPlayer {
 
     public void setFactionRanks(FactionRanks factionRanks) {
         this.factionRanks = factionRanks;
+    }
+
+    public ArrayList<Faction> getInvitations() {
+        return invitations;
+    }
+
+    public void addInvitations(Faction faction){
+        this.invitations.add(faction);
     }
 }

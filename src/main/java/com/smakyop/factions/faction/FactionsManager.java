@@ -74,6 +74,20 @@ public class FactionsManager {
                 faction.setKills(HardcoreFactions.getInstance().getFactionsConfig().getKills(faction.getName()));
                 faction.setDescription(HardcoreFactions.getInstance().getFactionsConfig().getDescription(faction.getName()));
                 faction.setCreationDate(HardcoreFactions.getInstance().getFactionsConfig().getCreationDate(faction.getName()));
+                faction.setMembers(HardcoreFactions.getInstance().getFactionsConfig().getMembers(faction.getName()));
+
+                if(HardcoreFactions.getInstance().getFactionsConfig().getConfiguration().getString("factions." + faction.getName() + ".home-location.world") != null)
+                    faction.setHomeLocation(HardcoreFactions.getInstance().getFactionsConfig().getHomeLocation(faction.getName()));
+            }
+        }
+    }
+
+    public void saveFactions(){
+        for(Faction factions : Faction.getFactions().values()){
+            if(HardcoreFactions.getInstance().getGeneralConfig().hasDatabase()){
+
+            }else{
+                HardcoreFactions.getInstance().getFactionsConfig().saveFaction(factions.getName());
             }
         }
     }
@@ -84,9 +98,9 @@ public class FactionsManager {
         player.sendMessage("§6> " + HardcoreFactions.getInstance().getRelationManager().getColorRelation(receiver.getFaction(), faction) + faction.getName() +
             " §7(§b" + faction.getOnlinePlayers() + "§7/§b" + faction.getMembers().size() + "§7)");
         player.sendMessage("§bDescription: §6" + faction.getDescription());
-        player.sendMessage("§bDTR: " + getDtrColor(faction) + faction.getDtr() + " §7(" + faction.getDtrManager().getDtrStatus().getName() + ")");
+        player.sendMessage("§bDTR: §6" + faction.getDtr() + " §7(§b" + faction.getDtrManager().getDtrStatus().getName() + "§7)");
         player.sendMessage("§bHome location: §6" + getHomeLocationFormat(faction));
-        player.sendMessage("§bPoints: §6" + faction.getPoints() + " §7(§6" + faction.getKills() + " §7kills)");
+        player.sendMessage("§bPoints: §6" + faction.getPoints() + " §7(§b" + faction.getKills() + " §7kills)");
         player.sendMessage("§bBalance: §6" + faction.getMoney() + "$");
         player.sendMessage("§bLeader: §6" + HardcoreFactions.getInstance().getPlayerManager().getPlayerName(faction.getOwnerUUID()));
         player.sendMessage("§bMembers: §6" + faction.getMembers().toString().replace("[", "").replace("]", ""));
