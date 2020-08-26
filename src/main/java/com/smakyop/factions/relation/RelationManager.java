@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 
 public class RelationManager {
 
-    public Relation getFactionRelation(Faction firstFaction, Faction secondFaction){
+    private Relation getFactionRelation(Faction firstFaction, Faction secondFaction){
         if(firstFaction == null || secondFaction == null) return Relation.NEUTRAL;
         if(firstFaction == secondFaction) return Relation.FACTION;
         if(firstFaction.isAllyWith(secondFaction)) return Relation.ALLY;
